@@ -1,6 +1,15 @@
 <h1>Posts#index</h1>
-<% @posts.each do |post| %>
- <p><%= post.tweet %></p>
+<% if user_signed_in? %>
+  <%= "#{current_user.account_name}さんでログイン中" %>
+  <%= link_to "新規投稿", new_post_path %>
+  <%= link_to "ログアウト", destroy_user_session_path, method: "delete" %>
+<% else %>
+  <p>ログインしていません</p>
+  <%= link_to "ユーザー登録", new_user_registration_path %>
+  <%= link_to "ログイン", new_user_session_path %>
 <% end %>
 
-<%= link_to "新規投稿", new_post_path %>
+<% @posts.each do |post| %>
+ <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %></p>
+<% end %>
+
