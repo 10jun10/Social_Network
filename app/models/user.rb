@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  validates :account_id, :account_name, presence: true 
+  validates :account_id, :account_name, presence: true
+  has_many :posts
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,

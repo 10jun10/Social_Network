@@ -38,15 +38,14 @@ RSpec.describe User, type: :model do
   end
 
   it "パスワードが6字以下で無効であること" do
-    user = FactoryBot.build(:user, password: "a" * 5,password_confirmation: "a" * 5)
+    user = FactoryBot.build(:user, password: "a" * 5, password_confirmation: "a" * 5)
     user.valid?
     expect(user.errors[:password]).to include("は6文字以上に設定して下さい。")
   end
-  
+
   it "パスワードとパスワード（確認）が不一致の時無効であること" do
-    user = FactoryBot.build(:user, password: "a" * 6,password_confirmation: "b" * 6)
+    user = FactoryBot.build(:user, password: "a" * 6, password_confirmation: "b" * 6)
     user.valid?
     expect(user.errors[:password_confirmation]).to include("がパスワードと一致していません。")
   end
-
 end
