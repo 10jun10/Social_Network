@@ -1,4 +1,4 @@
-<h1>Posts#index</h1>
+<h1>Posts#index</h1><i class="fab fa-accusoft"></i>
 <% if user_signed_in? %>
   <%= "#{current_user.account_name}さんでログイン中" %>
   <%= link_to "新規投稿", new_post_path %>
@@ -10,6 +10,21 @@
 <% end %>
 
 <% @posts.each do |post| %>
- <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %></p>
+  <% if user_signed_in? %>
+    <div class="tweet">
+      <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %>
+      <span action="<%= create_like_post_path(post) %>" class="like <% if post.likes.find_by(user_id: current_user.id) != nil %>active<% end %>" id="post<%= post.id %>">
+      ♡<%= post.likes.count %>
+      </span>
+      </p>
+    </div>
+  <% else %>
+    <div class="tweet">
+      <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %>
+      <span action="<%= create_like_post_path(post) %>" class="like">
+      ♡<%= post.likes.count %>
+      </span>
+      </p>
+    </div>
+  <% end %>
 <% end %>
-
