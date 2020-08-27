@@ -1,0 +1,13 @@
+<%= @user.account_name %>のページ
+
+<% Post.where(user_id: @user.id).each do |post| %>
+  <div class="tweet">
+        <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %>
+        <span action="<%= create_like_post_path(post) %>" class="like <% if post.likes.find_by(user_id: current_user.id) != nil %>active<% end %>" id="post<%= post.id %>">
+        ♡<%= post.likes.count %>
+        </span>
+        </p>
+  </div>
+<% end %>
+
+<%= link_to "トップページに戻る",root_path %>
