@@ -8,6 +8,7 @@
   <%= link_to "ユーザー登録", new_user_registration_path %>
   <%= link_to "ログイン", new_user_session_path %>
 <% end %>
+<br>
 
 <% @posts.each do |post| %>
   <% if user_signed_in? %>
@@ -27,5 +28,21 @@
       </span>
       </p>
     </div>
+  <% end %>
+<% end %>
+<br>
+<% if user_signed_in? %>
+  タイムライン
+  <% @posts.each do |post| %>
+    <% if Follow.find_by(following_id: post.user.id, followed_by_id: current_user.id) != nil || post.user.id == current_user.id %>
+      <div class="tweet">
+      <p><%= link_to "#{post.user.account_name}", user_path(post.user.id) %>
+        <% "(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")}):" %><%= post.tweet %>
+      <span action="<%= create_like_post_path(post) %>" class="like <% if post.likes.find_by(user_id: current_user.id) != nil %>active<% end %>" id="post<%= post.id %>">
+      ♡<%= post.likes.count %>
+      </span>
+      </p>
+    </div>
+    <% end %>
   <% end %>
 <% end %>

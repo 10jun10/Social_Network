@@ -29,10 +29,7 @@ RSpec.describe "Posts", type: :request do
         expect(response).to have_http_status(302)
       end
 
-      it "ログイン画面へリダイレクトすること" do
-        get new_post_path
-        expect(response).to redirect_to "/users/sign_in"
-      end
+
     end
   end
 
