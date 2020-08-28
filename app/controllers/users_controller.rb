@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
 
   def follow
-    if user_signed_in? && @user.id != current_user.id && Follow.find_by(following_id: @user.id) == nil
+    if user_signed_in? && @user.id != current_user.id && Follow.find_by(following_id: @user.id).nil?
       Follow.create(following_id: @user.id, followed_by_id: current_user.id)
       @follow = "follow"
     elsif user_signed_in? && @user.id != current_user.id && Follow.find_by(following_id: @user.id) != nil
@@ -16,9 +16,8 @@ class UsersController < ApplicationController
   end
 
   private
-  
+
   def set_user
     @user = User.find(params[:id])
   end
 end
-
