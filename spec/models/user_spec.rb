@@ -1,16 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  let(:user) { FactoryBot.create(:user) }
+  let(:other_user) { FactoryBot.create(:user) }
+
   describe "ユーザー登録できる場合" do
     it "アカウントID、アカウント名、メールアドレス、パスワードがあれば有効であること" do
-      user = FactoryBot.build(:user)
       expect(user).to be_valid
     end
   end
 
   describe "アカウントIDを検証する場合" do
     it "アカウントIDがなければ無効であること" do
-      user = FactoryBot.build(:user, account_id: nil)
+      user.account_id = nil
       user.valid?
       expect(user.errors[:account_id]).to include("が入力されていません。")
     end
@@ -18,7 +20,7 @@ RSpec.describe User, type: :model do
 
   describe "アカウント名を検証する場合" do
     it "アカウント名がなければ無効であること" do
-      user = FactoryBot.build(:user, account_name: nil)
+      user.account_name = nil
       user.valid?
       expect(user.errors[:account_name]).to include("が入力されていません。")
     end
@@ -26,14 +28,14 @@ RSpec.describe User, type: :model do
 
   describe "メールアドレスを検証する場合" do
     it "メールアドレスがなければ無効であること" do
-      user = FactoryBot.build(:user, email: nil)
+      user.email = nil
       user.valid?
       expect(user.errors[:email]).to include("が入力されていません。")
     end
 
     it "メールアドレスが重複していれば無効であること" do
       FactoryBot.create(:user, email: "test1@example.com")
-      user = FactoryBot.build(:user, email: "test1@example.com")
+      user.email = "test1@example.com"
       user.valid?
       expect(user.errors[:email]).to include("は既に使用されています。")
     end
