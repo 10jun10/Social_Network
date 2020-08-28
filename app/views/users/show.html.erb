@@ -1,5 +1,26 @@
-<%= @user.account_name %>のページ
+<h1><%= @user.account_name %>のページ</h1>
 
+<% if @user.id != current_user.id %>
+  <div id="follow" action="<%= follow_user_path(@user.id) %>">
+    <% if Follow.find_by(followed_by_id: current_user.id) == nil %>
+      フォローする
+    <% else %>
+      フォロー中
+    <% end %>
+  </div>
+<% end %>
+
+<p>フォロー数:<%= Follow.where(followed_by_id: @user.id).count %></p>
+<% Follow.where(followed_by_id: @user.id).each do |follow| %>
+  <%= link_to User.find(follow.following_id).account_name, user_path(follow.following_id) %>
+<% end %>
+<span id="follower">
+  <p>フォロワー数:<%= Follow.where(following_id: @user.id).count %></p>
+  <% Follow.where(following_id: @user.id).each do |follow| %>
+    <%= link_to User.find(follow.followed_by_id).account_name, user_path(follow.followed_by_id) %>
+  <% end %>
+</span>
+<br>
 <% Post.where(user_id: @user.id).each do |post| %>
   <div class="tweet">
         <p><%= "#{post.user.account_name}(#{post.created_at.in_time_zone('Tokyo').strftime("%Y/%m/%d %H:%M:%S")})：" %><%= post.tweet %>
@@ -11,3 +32,4 @@
 <% end %>
 
 <%= link_to "トップページに戻る",root_path %>
+
